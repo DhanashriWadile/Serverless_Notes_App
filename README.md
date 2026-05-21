@@ -1,4 +1,4 @@
-# Serverless-Notes-App
+# Serverless Notes App
 # 📝 Serverless Notes App on AWS
 
 ![AWS](https://img.shields.io/badge/AWS-Serverless-orange?style=for-the-badge&logo=amazonaws)
