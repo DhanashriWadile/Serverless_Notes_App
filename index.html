@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Notes App</title>
+
+<style>
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial;
+
+  background: url("https://img.freepik.com/free-photo/top-view-desk-concept-with-laptop_23-2148236850.jpg?semt=ais_hybrid&w=740&q=80") no-repeat center center fixed;
+  background-size: cover;
+}
+
+.container {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+
+  width: 320px;
+  padding: 20px;
+
+  border-radius: 10px;
+
+  margin: 80px auto;   /* centers it */
+  text-align: center;
+}
+
+input, button {
+  width: 90%;
+  padding: 10px;
+  margin: 10px;
+  border-radius: 5px;
+  border: none;
+}
+
+button {
+  background: #667eea;
+  color: white;
+  border: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Register / Login</h2>
+
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+
+<button onclick="register()">Register</button>
+<button onclick="login()">Login</button>
+
+<h3>Add Note</h3>
+<input id="title" placeholder="Title">
+<input id="content" placeholder="Content">
+<button onclick="addNote()">Add Note</button>
+
+<button onclick="getNotes()">Show Notes</button>
+
+<div id="notes"></div>
+</div>
+
+<script>
+const API = "https://h5hfnnv89i.execute-api.ap-south-1.amazonaws.com/prod; // replace
+
+fetch(API + "/register", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email: email.value,
+    password: password.value
+  })
+});
+
+fetch(API + "/login", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    email: email.value,
+    password: password.value
+  })
+});
+
+  let data = await res.json();
+  alert(data.message);
+}
+
+async function addNote() {
+  await fetch(API + "/add-note", {
+    method: "POST",
+    body: JSON.stringify({
+      email: email.value,
+      title: title.value,
+      content: content.value
+    })
+  });
+  alert("Note added");
+}
+
+async function getNotes() {
+  let res = await fetch(API + "/get-notes?email=" + email.value);
+  let data = await res.json();
+
+  let html = "";
+  data.forEach(n => {
+    html += `<p><b>${n.title}</b>: ${n.content}</p>`;
+  });
+
+  notes.innerHTML = html;
+}
+</script>
+
+</body>
+</html>
+
+<script>
+const API = "https://h5hfnnv89i.execute-api.ap-south-1.amazonaws.com/prod"; // replace this
+
+let userEmail = "";
+let token = "";
+
+// ✅ REGISTER
+async function register() {
+  try {
+    let res = await fetch(API + "/register", {
+      method: "POST",
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value
+      })
+    });
+
+    let data = await res.json();
+
+    if (res.status === 200) {
+      alert("✅ Registered successfully");
+    } else {
+      alert("❌ " + data.message);
+    }
+
+  } catch (err) {
+    alert("Error: " + err);
+  }
+}
+
+// ✅ LOGIN
+async function login() {
+  try {
+    let res = await fetch(API + "/login", {
+      method: "POST",
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value
+      })
+    });
+
+    let data = await res.json();
+
+    if (res.status === 200) {
+      alert("✅ Login successful");
+
+      token = data.token;        // store JWT
+      userEmail = email.value;   // store email
+
+    } else {
+      alert("❌ " + data.message);
+    }
+
+  } catch (err) {
+    alert("Error: " + err);
+  }
+}
+
+// ✅ ADD NOTE
+async function addNote() {
+  if (!token) {
+    alert("⚠️ Please login first");
+    return;
+  }
+
+  try {
+    let res = await fetch(API + "/add-note", {
+      method: "POST",
+      headers: {
+        "Authorization": token
+      },
+      body: JSON.stringify({
+        title: title.value,
+        content: content.value
+      })
+    });
+
+    let data = await res.json();
+
+    if (res.status === 200) {
+      alert("✅ Note added");
+    } else {
+      alert("❌ " + data.message);
+    }
+
+  } catch (err) {
+    alert("Error: " + err);
+  }
+}
+
+// ✅ VIEW NOTES
+async function getNotes() {
+  if (!token) {
+    alert("⚠️ Please login first");
+    return;
+  }
+
+  try {
+    let res = await fetch(API + "/get-notes", {
+      method: "GET",
+      headers: {
+        "Authorization": token
+      }
+    });
+
+    let data = await res.json();
+
+    let html = "";
+
+    if (data.length === 0) {
+      html = "<p>No notes found</p>";
+    } else {
+      data.forEach(n => {
+        html += `<p><b>${n.title}</b>: ${n.content}</p>`;
+      });
+    }
+
+    notes.innerHTML = html;
+
+  } catch (err) {
+    alert("Error: " + err);
+  }
+}
+</script>
