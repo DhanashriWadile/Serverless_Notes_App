@@ -1,5 +1,5 @@
-# Serverless-Notes-Saver-App
-# 📝 Serverless Notes App with Authentication on AWS
+# Serverless-Notes-App
+# 📝 Serverless Notes App on AWS
 
 ![AWS](https://img.shields.io/badge/AWS-Serverless-orange?style=for-the-badge&logo=amazonaws)
 ![Python](https://img.shields.io/badge/Python-Backend-blue?style=for-the-badge&logo=python)
@@ -10,76 +10,78 @@
 
 ---
 
-# 🚀 Serverless Notes App
+# 🚀 Project Overview
 
-A fully serverless Notes Application built using AWS Cloud Services with user authentication, note management, and attractive frontend UI.
+This project is a fully serverless Notes Application built using AWS Cloud services with user authentication and notes management functionality.
 
-This project allows users to:
+The application allows users to:
 
 ✅ Register Account  
 ✅ Login Securely  
 ✅ Add Notes  
-✅ View Personal Notes  
-✅ Store Data in DynamoDB  
-✅ Host Frontend on Amazon S3  
-✅ Use AWS Lambda for Backend Logic  
+✅ View Saved Notes  
+✅ Store Notes in DynamoDB  
 ✅ Access APIs through API Gateway  
+✅ Host Frontend using Amazon S3  
 
 ---
 
-# 📌 Project Architecture
+# 📌 AWS Services Used
+
+| AWS Service | Purpose |
+|---|---|
+| AWS Lambda | Backend business logic |
+| Amazon API Gateway | REST API creation |
+| Amazon DynamoDB | NoSQL database |
+| Amazon S3 | Static website hosting |
+| AWS IAM | Access permissions |
+
+---
+
+# 🏗️ Project Architecture
 
 ```text
-User Interface (S3 Hosted Website)
-            │
-            ▼
-     API Gateway (REST APIs)
-            │
-            ▼
-      AWS Lambda Functions
-            │
-            ▼
-        DynamoDB Tables
+Frontend (HTML/CSS/JS Hosted on S3)
+                │
+                ▼
+        API Gateway REST APIs
+                │
+                ▼
+         AWS Lambda Functions
+                │
+                ▼
+          Amazon DynamoDB
 ```
-
----
-
-# 🧰 AWS Services Used
-
-| Service | Purpose |
-|---|---|
-| AWS Lambda | Backend serverless functions |
-| Amazon API Gateway | REST API management |
-| Amazon DynamoDB | NoSQL database |
-| Amazon S3 | Frontend hosting |
-| AWS IAM | Permissions management |
 
 ---
 
 # ✨ Features
 
-## 👤 Authentication System
+## 🔐 Authentication Features
 - User Registration
 - User Login
 - Credential Validation
-- Login Success Popup
 - Registration Success Popup
+- Login Success Popup
 
 ---
 
-## 📝 Notes Management
+## 📝 Notes Features
 - Add Notes
-- Retrieve User Notes
-- Store Notes in DynamoDB
-- Dynamic Notes Display
+- View Notes
+- User-Specific Notes
+- Real-Time Notes Rendering
+- Note Added Success Popup
 
 ---
 
-## 🎨 Frontend UI
-- Responsive Design
-- Clean Interface
+## 🎨 Frontend Features
+- Attractive UI Design
+- Background Image UI
+- Responsive Layout
 - Popup Notifications
-- Real-Time Updates
+- Interactive Buttons
+- Dynamic Content Rendering
 
 ---
 
@@ -117,18 +119,18 @@ Serverless-Notes-App/
 
 | Attribute | Type |
 |---|---|
-| userId | String (Partition Key) |
-| noteId | String (Sort Key) |
-| note | String |
+| email | String (Partition Key) |
+| title | String |
+| content | String |
 
 ---
 
 # 🔥 Lambda Functions
 
 ## ✅ Register Function
-Stores new user credentials in DynamoDB.
+Registers a new user into DynamoDB.
 
-### Input
+### Request Body
 ```json
 {
   "email": "user@gmail.com",
@@ -139,9 +141,9 @@ Stores new user credentials in DynamoDB.
 ---
 
 ## ✅ Login Function
-Verifies user credentials.
+Validates user credentials.
 
-### Input
+### Request Body
 ```json
 {
   "email": "user@gmail.com",
@@ -154,23 +156,19 @@ Verifies user credentials.
 ## ✅ Add Note Function
 Adds user notes into DynamoDB.
 
-### Input
+### Request Body
 ```json
 {
-  "userId": "user@gmail.com",
-  "note": "My first note"
+  "email": "user@gmail.com",
+  "title": "AWS Notes",
+  "content": "Serverless applications are scalable."
 }
 ```
 
 ---
 
 ## ✅ Get Notes Function
-Retrieves notes of logged-in user.
-
-### API Request
-```text
-GET /get-notes?userId=user@gmail.com
-```
+Fetches notes of logged-in users.
 
 ---
 
@@ -181,72 +179,21 @@ GET /get-notes?userId=user@gmail.com
 | POST | /register | Register User |
 | POST | /login | Login User |
 | POST | /add-note | Add New Note |
-| GET | /get-notes | Fetch User Notes |
+| GET | /get-notes | Retrieve Notes |
 
 ---
 
-# 🎨 Frontend Features
+# 🎨 Frontend Preview
 
-✅ Attractive UI  
-✅ Success Popup Alerts  
-✅ Responsive Layout  
-✅ Dynamic Notes Rendering  
-✅ User-Friendly Design  
+## 🖥️ User Interface Includes
 
----
-
-# ☁️ S3 Static Website Hosting
-
-The frontend is hosted using Amazon S3 Static Website Hosting.
-
-### Steps:
-1. Create S3 Bucket
-2. Upload `index.html`
-3. Enable Static Website Hosting
-4. Configure Bucket Policy
-5. Access Website URL
-
----
-
-# 🔐 IAM Role Configuration
-
-Lambda functions require permissions to access DynamoDB.
-
-### Attached Policy:
-```text
-AmazonDynamoDBFullAccess
-```
-
----
-
-# 🚀 Deployment Steps
-
-## Step 1: Create DynamoDB Tables
-- Users
-- Notes
-
----
-
-## Step 2: Create IAM Role
-Attach DynamoDB access policy.
-
----
-
-## Step 3: Create Lambda Functions
-- Register Function
-- Login Function
-- Add Note Function
-- Get Notes Function
-
----
-
-## Step 4: Configure API Gateway
-Create REST APIs and enable CORS.
-
----
-
-## Step 5: Upload Frontend to S3
-Host application using static website hosting.
+✅ Email & Password Authentication  
+✅ Register Button  
+✅ Login Button  
+✅ Add Notes Section  
+✅ Show Notes Button  
+✅ Dynamic Notes Display  
+✅ Popup Alerts  
 
 ---
 
@@ -254,7 +201,7 @@ Host application using static website hosting.
 
 ## 👤 User Registration
 ```text
-User → Register → DynamoDB → Success Popup
+User → Register → Lambda → DynamoDB → Success Popup
 ```
 
 ---
@@ -273,49 +220,91 @@ User → Add Note → Lambda → DynamoDB
 
 ---
 
-## 📋 Fetch Notes
+## 📋 View Notes
 ```text
-User → Get Notes → Display Notes
+User → Fetch Notes → Display on Screen
 ```
 
 ---
 
-# 💡 Future Improvements
+# ☁️ S3 Static Website Hosting
 
-- JWT Authentication
+The frontend is hosted using Amazon S3 Static Website Hosting.
+
+## Deployment Steps
+1. Create S3 Bucket
+2. Upload index.html
+3. Enable Static Website Hosting
+4. Configure Bucket Permissions
+5. Open Website Endpoint
+
+---
+
+# 🔑 IAM Permissions
+
+Lambda functions require access to DynamoDB.
+
+## Attached IAM Policy
+```text
+AmazonDynamoDBFullAccess
+```
+
+---
+
+# 🚀 Deployment Steps
+
+## Step 1: Create DynamoDB Tables
+- Users Table
+- Notes Table
+
+---
+
+## Step 2: Create IAM Role
+Attach DynamoDB permission policy.
+
+---
+
+## Step 3: Create Lambda Functions
+- Register Lambda
+- Login Lambda
+- Add Note Lambda
+- Get Notes Lambda
+
+---
+
+## Step 4: Configure API Gateway
+- Create REST APIs
+- Enable CORS
+- Connect Lambda functions
+
+---
+
+## Step 5: Host Frontend on S3
+Upload frontend files and enable static hosting.
+
+---
+
+# 💡 Future Enhancements
+
 - Password Hashing
 - Delete Notes Feature
 - Edit Notes Feature
-- React Frontend
 - Dark Mode UI
-- AWS Cognito Integration
+- React Frontend
+- Email Verification
+- Mobile Responsive UI
 
 ---
 
 # 🛡️ Security Improvements
 
-Currently passwords are stored as plain text for learning purposes.
+Current project is for learning and educational purposes.
 
 Recommended improvements:
-- Use bcrypt hashing
-- Use JWT tokens
-- Enable HTTPS
+- Encrypt Passwords
+- Use HTTPS
+- Store Sessions Securely
 - Add Authentication Middleware
-
----
-
-# 🎯 Learning Outcomes
-
-By completing this project, you will learn:
-
-✅ Serverless Architecture  
-✅ AWS Lambda  
-✅ API Gateway  
-✅ DynamoDB Operations  
-✅ S3 Static Hosting  
-✅ IAM Roles & Permissions  
-✅ Frontend-Backend Integration  
-✅ REST API Development  
 
 ---
 
@@ -326,20 +315,34 @@ By completing this project, you will learn:
 - JavaScript
 - Python
 - AWS Lambda
-- DynamoDB
+- Amazon DynamoDB
 - API Gateway
 - Amazon S3
 
 ---
 
+# 🎯 Learning Outcomes
+
+By building this project, you will learn:
+
+✅ Serverless Architecture  
+✅ REST APIs using API Gateway  
+✅ AWS Lambda Functions  
+✅ DynamoDB CRUD Operations  
+✅ S3 Static Website Hosting  
+✅ Frontend & Backend Integration  
+✅ Cloud Application Deployment  
+
+---
+
 # 🌟 Project Highlights
 
-✔ Fully Serverless  
-✔ Cost Efficient  
-✔ Scalable Architecture  
+✔ Fully Serverless Architecture  
 ✔ Cloud Native Application  
 ✔ Beginner Friendly AWS Project  
-✔ Real-World Use Case  
+✔ Attractive UI Design  
+✔ Real-World Implementation  
+✔ Scalable and Cost Efficient  
 
 ---
 
@@ -347,7 +350,7 @@ By completing this project, you will learn:
 
 ## Dhanashri Wadile
 
-Passionate about Cloud Computing, AWS, Python, and DevOps technologies.
+AWS & Python Enthusiast passionate about Cloud Computing, DevOps, and Serverless Technologies.
 
 ---
 
@@ -355,8 +358,8 @@ Passionate about Cloud Computing, AWS, Python, and DevOps technologies.
 
 If you like this project:
 
-🌟 Star the repository  
-🍴 Fork the project  
+⭐ Star this repository  
+🍴 Fork this repository  
 📢 Share with others  
 
 ---
@@ -364,7 +367,6 @@ If you like this project:
 # 📬 Connect
 
 ## GitHub Profile
-
 https://github.com/DhanashriWadile
 
-## Build • Learn • Deploy • Repeat 🚀
+## Build • Deploy • Learn • Repeat 🚀
